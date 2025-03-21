@@ -1,5 +1,6 @@
 package org.inventory;
 
+import org.inventory.dao.OrderDAO;
 import org.inventory.models.User;
 import org.inventory.models.Product;
 import org.inventory.services.AuthService;
@@ -46,8 +47,6 @@ public class Main {
         }
     }
 
-    private static void manageOrders(Scanner scanner, User loggedInUser) {
-    }
 
     private static void registerUser(Scanner scanner) {
         System.out.print("Enter Name: ");
@@ -89,9 +88,8 @@ public class Main {
             System.out.println("3. Delete Product");
             System.out.println("4. Search Product");
             System.out.println("5. Display Inventory");
-            System.out.println("6. Place Order");
-            System.out.println("7. View Orders");
-            System.out.println("8. Logout");
+            System.out.println("6. View Orders");
+            System.out.println("7. Logout");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
@@ -113,10 +111,9 @@ public class Main {
                     inventoryService.displayAllInventory();
                     break;
                 case 6:
-                    placeOrder(scanner, user);
+                    System.out.println("Working on this....!!");
                     break;
-
-                case 8:
+                case 7:
                     System.out.println("Logging out...");
                     return;
                 default:
@@ -158,18 +155,25 @@ public class Main {
         System.out.println("Are you Sure? (y/n)");
         String choice = scanner.nextLine();
         if(Objects.equals(choice, "y"))
-            inventoryService.deleteProduct(product);
+            if(inventoryService.deleteProduct(product)){
+                System.out.println("Product deleted");
+            }
 
     }
 
     private static void searchProduct(Scanner scanner) {
         System.out.println("Enter the By which Searching \n 1.ByName \n 2.ByCategory");
         int choice = scanner.nextInt();
+        scanner.nextLine(); // Consume the leftover newline
         if(choice == 1) {
             System.out.print("Enter Product Name to Search: ");
-            String searchName = scanner.nextLine();
+            String searchName = scanner.nextLine().trim();
             Product product = inventoryService.searchProductByUsingName(searchName);
-            InventoryService.displayProduct(product);
+            if (product == null)
+                System.out.println("Product not found!");
+            else
+                InventoryService.displayProduct(product);
+
 
         }else if(choice == 2){
             System.out.print("Enter Product Category to Search: ");
@@ -180,14 +184,45 @@ public class Main {
         }
 
     }
+    private static void manageOrders(Scanner scanner, User loggedInUser) {
+        while (true) {
+            System.out.println("\n===== Inventory & Order Management =====");
+            System.out.println("1. View All Products");
+            System.out.println("2. Search Categories");
+            System.out.println("3. Placed Order");
+            System.out.println("4. View Orders by me");
+            System.out.println("5. logout");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
 
+            switch (choice) {
+                case 1:
+                    inventoryService.displayAllInventory();
+                    break;
+                case 2:
+                    searchProduct(scanner);
+                    break;
+                case 3:
+                    placeOrder(scanner, loggedInUser);
+                    break;
+                case 4:
+
+                    break;
+                case 5:
+                    System.out.println("Logging out...");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+        }
+    }
     private static void placeOrder(Scanner scanner, User user) {
-        System.out.print("Enter Product ID: ");
-        int productId = scanner.nextInt();
+        System.out.print("Enter Product Name: ");
+        String productName = scanner.nextLine();
         System.out.print("Enter Quantity: ");
         int quantity = scanner.nextInt();
-//        orderService.placeOrder(user, productId, quantity);
-        System.out.print("Working in Progress");
+        OrderDAO.placeOrder(user, productName, quantity);
     }
 
 }

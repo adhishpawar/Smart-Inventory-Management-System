@@ -3,21 +3,16 @@ package org.inventory.services;
 import org.inventory.dao.InventoryDAO;
 import org.inventory.models.Product;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class InventoryService {
 
-    private final Map<Integer, Product> inventory = new HashMap<>();
-    private int productIdCounter = 1; //-->Auto Incrementation
 
     public InventoryService() {
         this.inventoryDAO = new InventoryDAO();
     }
 
-    private final InventoryDAO inventoryDAO;
+    private static InventoryDAO inventoryDAO = null;
     //Add new Product
     public void addProduct(String name, String category, double price, int quantity)
     {
@@ -30,7 +25,7 @@ public class InventoryService {
         }
     }
 
-    public void updateProduct(String name, String category, double price, int quantity) {
+    public static void updateProduct(String name, String category, double price, int quantity) {
         // Step 1: Fetch the product first
         Product existingProduct = InventoryDAO.searchProductByUsingName(name);
 
@@ -61,9 +56,8 @@ public class InventoryService {
     }
 
 
-    public boolean deleteProduct(Product product)
+    public static boolean deleteProduct(Product product)
     {
-
         return inventoryDAO.deleteProduct(product);
     }
 
@@ -114,10 +108,7 @@ public class InventoryService {
     public static void displayProduct(Product product)
     {
         // Check if products are found
-        if (products.isEmpty()) {
-            System.out.println("No products found with the given category.");
-            return;
-        }
+
         // Display product
         System.out.println("Products");
         System.out.println("-------------------------------------------------------------");
