@@ -48,15 +48,18 @@ Order ID: 101 | Product ID: 1 | Product Name: Laptop | Quantity: 2 | Order Date:
 ```
 
 ## Project Structure
-src/
-├── org.inventory/
-│   ├── Main.java
-│   ├── dao/
-│   │   └── OrderDAO.java
-│   ├── models/
-│   │   ├── Product.java
-│   │   └── User.java
-│   └── services/
-│       ├── AuthService.java
-│       └── InventoryService.java
+- src/
+- ├── org.inventory/
+- │   ├── Main.java
+- │   ├── dao/
+- │   │   └── OrderDAO.java
+- |   │   └── InventoryDAO.java
+- |   │   └── UserDAO.java
+- │   ├── models/
+- │   │   ├── Product.java
+- │   │   └── User.java
+- │   │   └── Order.java
+- │   └── services/
+- │       ├── AuthService.java
+- │       └── InventoryService.java
 
