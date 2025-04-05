@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
+import static org.inventory.dao.OrderDAO.getUserOrder;
+
 public class Main {
     private static final AuthService authService = new AuthService();
     private static final InventoryService inventoryService = new InventoryService();
@@ -207,7 +209,7 @@ public class Main {
                     placeOrder(scanner, loggedInUser);
                     break;
                 case 4:
-
+                    viewOrder(loggedInUser);
                     break;
                 case 5:
                     System.out.println("Logging out...");
@@ -223,6 +225,10 @@ public class Main {
         System.out.print("Enter Quantity: ");
         int quantity = scanner.nextInt();
         OrderDAO.placeOrder(user, productName, quantity);
+    }
+
+    private static void viewOrder(User user){
+        getUserOrder(user);
     }
 
 }
